@@ -1,0 +1,12 @@
+type Query{
+    getExpenses(input: GetExpensesInput!): Expenses
+}
+
+
+input GetExpensesInput{
+    filter: String!
+}
+
+type Expenses{
+    id: Int!
+}

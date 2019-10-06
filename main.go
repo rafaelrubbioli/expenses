@@ -4,13 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rafaelrubbioli/espenses/generated"
-
-	"github.com/rafaelrubbioli/espenses/resolver"
-
 	"github.com/99designs/gqlgen/example/dataloader"
 	"github.com/99designs/gqlgen/handler"
 	"github.com/go-chi/chi"
+	"github.com/rafaelrubbioli/espenses/generated"
+	"github.com/rafaelrubbioli/espenses/resolver"
 )
 
 func main() {

@@ -1,10 +1,10 @@
 schema:
 - schema.graphql
 exec:
-  filename: generated.go
+  filename: generated/generated.go
 model:
-  filename: models.go
+  filename: models/models.go
 resolver:
-  filename: resolver.go
+  filename: resolver/resolver.go
   type: Resolver
 autobind: []

@@ -3,3 +3,6 @@ gqlgen:
 
 generate:
 	go generate ./...
+
+run:
+	go run -mod=vendor main.go

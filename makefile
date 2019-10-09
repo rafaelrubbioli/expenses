@@ -13,4 +13,4 @@ rm:
 	docker rm expenses
 
 run:
-	go run -mod=vendor main.go
+	go run cmd/server/server.go

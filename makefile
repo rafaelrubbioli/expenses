@@ -6,10 +6,11 @@ generate:
 
 docker:
 	docker build -t expenses:01 .
-	docker run -d expenses:01
+	docker run --name expenses -d expenses:01
 
 rm:
-	docker delete expenses:01
+	docker stop expenses
+	docker rm expenses
 
 run:
 	go run -mod=vendor main.go

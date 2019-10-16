@@ -1,10 +1,10 @@
 schema:
 - schema.graphql
 exec:
-  filename: generated/generated.go
+  filename: pkg/graphql/internal/gql_gen.go
 model:
-  filename: models/models.go
+  filename: pkg/graphql/internal/models/models.go
 resolver:
-  filename: resolver/resolver.go
+  filename: pkg/graphql/internal/resolver/resolver.go
   type: Resolver
 autobind: []

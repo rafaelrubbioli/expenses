@@ -5,7 +5,7 @@ COPY . /app
 WORKDIR /app
 ENV GO112MODULE=on
 
-RUN CGO_ENABLED=0 go build -o expenses -mod=vendor
+RUN CGO_ENABLED=0 go build -o expenses cmd/server/server.go
 
 FROM alpine
 

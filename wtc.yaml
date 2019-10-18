@@ -1,0 +1,23 @@
+debounce: 300
+ignore: "\\.git/"
+trig: build
+rules:
+  - name: build
+    match: "\\.go"
+    ignore: "_test\\.go$"
+    command: "go build cmd/server/server.go"
+    trig: run
+  - name: run
+    match: "^$"
+    command: "./server"
+  - name: gqlgen
+    match: "schema\\.graphql$"
+    command: "go run github.com/99designs/gqlgen"
+  - name: test
+    match: "_test\\.go$"
+    command: "go test -cover {PKG}"
+  - name: lint
+    match: "\\.go$"
+    ignore: "_gen_?"
+    command: "golangci-lint run {FILE}"
+    debounce: 1000

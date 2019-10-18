@@ -22,7 +22,7 @@ jobs:
                   GOPATH: /home/runner/work/expenses/go
             - name: Test
               run: |
-                  go test -mod=vendor -race -cover ./...
+                  go test -race -cover ./...
               env:
                   GOPATH: /home/runner/work/expenses/go
 

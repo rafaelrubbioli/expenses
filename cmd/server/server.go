@@ -6,6 +6,8 @@ import (
 
 	"github.com/99designs/gqlgen/example/dataloader"
 	"github.com/go-chi/chi"
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/rafaelrubbioli/espenses/pkg/graphql"
 )
 

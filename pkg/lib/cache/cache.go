@@ -1,8 +1,9 @@
 package cache
 
 import (
-	c "github.com/patrickmn/go-cache"
 	"time"
+
+	c "github.com/patrickmn/go-cache"
 )
 
 const (

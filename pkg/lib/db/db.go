@@ -24,12 +24,12 @@ type mysql struct {
 }
 
 func (m mysql) Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error {
-	return m.db.GetContext(ctx, dest, query, args)
+	return m.db.GetContext(ctx, dest, query, args...)
 }
 func (m mysql) Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error {
-	return m.db.SelectContext(ctx, dest, query, args)
+	return m.db.SelectContext(ctx, dest, query, args...)
 }
 
 func (m mysql) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
-	return m.db.ExecContext(ctx, query, args)
+	return m.db.ExecContext(ctx, query, args...)
 }

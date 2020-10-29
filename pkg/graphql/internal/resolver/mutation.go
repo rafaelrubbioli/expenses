@@ -1,3 +1,3 @@
 package resolver
 
-type mutation struct{}
+//type mutation struct{}

@@ -13,10 +13,17 @@ type MySQL interface {
 	Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 }
 
-func NewMySQL(db *sqlx.DB) MySQL {
+func NewMySQL() (MySQL, error) {
+	var conn string
+	// todo: get conn from config
+
+	db, err := sqlx.Connect("mysql", conn)
+	if err != nil {
+		return nil, err
+	}
 	return mysql{
 		db: db,
-	}
+	}, nil
 }
 
 type mysql struct {

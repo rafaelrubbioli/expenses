@@ -8,7 +8,7 @@ import (
 )
 
 type User interface{
-	Create(ctx context.Context, name string) (int64, error)
+	Create(ctx context.Context, name , password string) (int64, error)
 	Get(ctx context.Context, id int64) (*entity.User, error)
 	Update(ctx context.Context, user *entity.User) error
 	Delete(ctx context.Context, id int64) error
@@ -22,9 +22,9 @@ func NewUserRepository(db db.MySQL) User {
 	return user{db: db}
 }
 
-func (r user) Create(ctx context.Context, name string) (int64, error) {
-	query := `INSERT INTO users (name) VALUES (?)`
-	result, err := r.db.Exec(ctx, query, name)
+func (r user) Create(ctx context.Context, name, password string) (int64, error) {
+	query := `INSERT INTO users (name, password) VALUES (?, ?)`
+	result, err := r.db.Exec(ctx, query, name, password)
 	if err != nil {
 		return 0, err
 	}

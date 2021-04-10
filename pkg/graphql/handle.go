@@ -8,13 +8,15 @@ import (
 	"runtime/debug"
 
 	"github.com/99designs/gqlgen/handler"
+
 	graphql "github.com/rafaelrubbioli/espenses/pkg/graphql/internal"
 	"github.com/rafaelrubbioli/espenses/pkg/graphql/internal/resolver"
+	"github.com/rafaelrubbioli/espenses/pkg/service"
 )
 
-func Handle() http.HandlerFunc {
+func Handle(services service.All) http.HandlerFunc {
 	return handler.GraphQL(
-		graphql.NewExecutableSchema(graphql.Config{Resolvers: &resolver.Resolver{}}),
+		graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver.New(services)}),
 
 		handler.RecoverFunc(func(ctx context.Context, err interface{}) error {
 			log.Print(err)

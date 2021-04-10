@@ -2,10 +2,24 @@ type Query{
     getExpenses(input: GetExpensesInput!): Expenses
 }
 
+type Mutation {
+    createUser(input: CreateUserInput!): User!
+}
+
 input GetExpensesInput{
     filter: String!
 }
 
+input CreateUserInput{
+    name: String!
+    password: String!
+}
+
 type Expenses{
     id: Int!
+}
+
+type User{
+    id: Int!
+    name: String!
 }

@@ -2,29 +2,38 @@ package repository
 
 import (
 	"context"
+	_ "embed"
+
+	"github.com/nleof/goyesql"
 
 	"github.com/rafaelrubbioli/espenses/pkg/entity"
 	"github.com/rafaelrubbioli/espenses/pkg/lib/db"
 )
 
-type Tag interface{
+type Tag interface {
 	Create(ctx context.Context, name string) (int64, error)
 	Get(ctx context.Context, id int64) (*entity.Tag, error)
 	Update(ctx context.Context, user *entity.Tag) error
 	Delete(ctx context.Context, id int64) error
 }
 
+//go:embed tag.sql
+var tagQueries []byte
+
 type tag struct {
-	db db.MySQL
+	db      db.MySQL
+	queries goyesql.Queries
 }
 
 func NewTagRepository(db db.MySQL) Tag {
-	return tag{db: db}
+	return tag{
+		db:      db,
+		queries: goyesql.MustParseBytes(tagQueries),
+	}
 }
 
 func (r tag) Create(ctx context.Context, name string) (int64, error) {
-	query := `INSERT INTO tags (name) VALUES (?)`
-	result, err := r.db.Exec(ctx, query, name)
+	result, err := r.db.Exec(ctx, r.queries["create"], name)
 	if err != nil {
 		return 0, err
 	}
@@ -39,8 +48,7 @@ func (r tag) Create(ctx context.Context, name string) (int64, error) {
 
 func (r tag) Get(ctx context.Context, id int64) (*entity.Tag, error) {
 	var tag entity.Tag
-	query := `SELECT id, name FROM tags WHERE id = ? LIMIT 1`
-	err := r.db.Get(ctx, &tag, query, id)
+	err := r.db.Get(ctx, &tag, r.queries["by-id"], id)
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +57,11 @@ func (r tag) Get(ctx context.Context, id int64) (*entity.Tag, error) {
 }
 
 func (r tag) Update(ctx context.Context, tag *entity.Tag) error {
-	query := `UPDATE tags SET name = (?) WHERE id = ?`
-	_, err := r.db.Exec(ctx, query, tag.Name, tag.ID)
+	_, err := r.db.Exec(ctx, r.queries["update"], tag.Name, tag.ID)
 	return err
 }
 
 func (r tag) Delete(ctx context.Context, id int64) error {
-	query := `DELETE FROM tags WHERE id = ?`
-	_, err := r.db.Exec(ctx, query, id)
+	_, err := r.db.Exec(ctx, r.queries["delete"], id)
 	return err
 }

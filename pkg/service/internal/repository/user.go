@@ -2,29 +2,37 @@ package repository
 
 import (
 	"context"
+	_ "embed"
 
+	"github.com/nleof/goyesql"
 	"github.com/rafaelrubbioli/espenses/pkg/entity"
 	"github.com/rafaelrubbioli/espenses/pkg/lib/db"
 )
 
-type User interface{
-	Create(ctx context.Context, name , password string) (int64, error)
+type User interface {
+	Create(ctx context.Context, name, password string) (int64, error)
 	Get(ctx context.Context, id int64) (*entity.User, error)
 	Update(ctx context.Context, user *entity.User) error
 	Delete(ctx context.Context, id int64) error
 }
 
+//go:embed user.sql
+var userQueries []byte
+
 type user struct {
-	db db.MySQL
+	db      db.MySQL
+	queries goyesql.Queries
 }
 
 func NewUserRepository(db db.MySQL) User {
-	return user{db: db}
+	return user{
+		db:      db,
+		queries: goyesql.MustParseBytes(userQueries),
+	}
 }
 
 func (r user) Create(ctx context.Context, name, password string) (int64, error) {
-	query := `INSERT INTO users (name, password) VALUES (?, ?)`
-	result, err := r.db.Exec(ctx, query, name, password)
+	result, err := r.db.Exec(ctx, r.queries["create"], name, password)
 	if err != nil {
 		return 0, err
 	}
@@ -39,8 +47,7 @@ func (r user) Create(ctx context.Context, name, password string) (int64, error) 
 
 func (r user) Get(ctx context.Context, id int64) (*entity.User, error) {
 	var user entity.User
-	query := `SELECT id, name FROM users WHERE id = ? LIMIT 1`
-	err := r.db.Get(ctx, &user, query, id)
+	err := r.db.Get(ctx, &user, r.queries["by-id"], id)
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +56,11 @@ func (r user) Get(ctx context.Context, id int64) (*entity.User, error) {
 }
 
 func (r user) Update(ctx context.Context, user *entity.User) error {
-	query := `UPDATE users SET name = (?) WHERE id = ?`
-	_, err := r.db.Exec(ctx, query, user.Name, user.ID)
+	_, err := r.db.Exec(ctx, r.queries["update"], user.Name, user.ID)
 	return err
 }
 
 func (r user) Delete(ctx context.Context, id int64) error {
-	query := `DELETE FROM users WHERE id = ?`
-	_, err := r.db.Exec(ctx, query, id)
+	_, err := r.db.Exec(ctx, r.queries["delete"], id)
 	return err
 }
